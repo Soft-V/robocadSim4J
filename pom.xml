@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.softv.robocad</groupId>
+    <groupId>com.github.soft-v</groupId>
     <artifactId>robocadSim4J</artifactId>
     <version>1.0-SNAPSHOT</version>
     <build>
@@ -19,6 +19,36 @@
             </plugin>
         </plugins>
     </build>
+
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Java Library for robocadV</description>
+    <url>https://github.com/Soft-V/robocadSim4J</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Airat Abdrakov</name>
+            <email>abdrakovairat@gmail.com</email>
+            <organization>Soft V</organization>
+            <organizationUrl>https://github.com/Soft-V</organizationUrl>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <scm>
+        <connection>scm:git:git://github.com/Soft-V/robocadSim4J.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Soft-V/robocadSim4J.git</developerConnection>
+        <url>https://github.com/Soft-V/robocadSim4J/tree/main</url>
+    </scm>
 
     <dependencies>
         <dependency>
