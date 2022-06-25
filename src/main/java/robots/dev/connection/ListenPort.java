@@ -74,10 +74,6 @@ public class ListenPort
                 if (this.isCamera)
                 {
                     out.write("Wait for size".getBytes(StandardCharsets.UTF_16LE));
-//                    if (in.readInt() != 4)
-//                    {
-//                        continue;
-//                    }
                     byte[] imgSize = new byte[4];
                     in.readFully(imgSize, 0, 4);
 
@@ -91,14 +87,19 @@ public class ListenPort
                 else
                 {
                     out.write("Wait for data".getBytes(StandardCharsets.UTF_16LE));
-                    int length = in.readInt();
+                    byte[] dataSize = new byte[4];
+                    in.readFully(dataSize, 0, 4);
+
+                    int length = (dataSize[3] & 0xff) << 24 | (dataSize[2] & 0xff) << 16 |
+                            (dataSize[1] & 0xff) << 8 | (dataSize[0] & 0xff);
                     if(length > 0)
                     {
                         byte[] message = new byte[length];
-                        in.readFully(message, 0, message.length);
+                        in.readFully(message, 0, length);
                         this.outString = new String(message, StandardCharsets.UTF_16LE);
                     }
                 }
+                Thread.sleep(4);
             }
 
             if (Holder.LOG_LEVEL < Holder.LOG_EXC_INFO)
@@ -110,7 +111,7 @@ public class ListenPort
             this.sct.shutdownOutput();
             this.sct.close();
         }
-        catch (IOException e)
+        catch (IOException | InterruptedException e)
         {
             // there could be a error
         }

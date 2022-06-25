@@ -67,6 +67,8 @@ public class TalkPort
                 out.write((this.outString + "$").getBytes(StandardCharsets.UTF_16LE));
                 byte[] message = new byte[4];
                 in.readFully(message, 0, message.length);
+
+                Thread.sleep(4);
             }
 
             if (Holder.LOG_LEVEL < Holder.LOG_EXC_INFO)
@@ -78,7 +80,7 @@ public class TalkPort
             this.sct.shutdownOutput();
             this.sct.close();
         }
-        catch (IOException e)
+        catch (IOException | InterruptedException e)
         {
             // there could be a error
         }

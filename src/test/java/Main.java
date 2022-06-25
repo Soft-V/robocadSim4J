@@ -26,8 +26,8 @@ public class Main
 
         RT2 robot = new RT2();
         robot.connect();
-        robot.setRightMotorSpeed(30);
-        robot.setLeftMotorSpeed(-30);
+        robot.setRightMotorSpeed(-30);
+        robot.setLeftMotorSpeed(30);
 
         long stTime = System.currentTimeMillis();
 
@@ -37,7 +37,8 @@ public class Main
 
         while (System.currentTimeMillis() - stTime < 8000)
         {
-            System.out.println(robot.getBytesFromCamera().length);
+            // System.out.println(robot.getBytesFromCamera().length);
+            System.out.println(robot.getRightUS());
             if (robot.getBytesFromCamera().length > 0)
                 icon = Converter(robot.getBytesFromCamera());
             jLabel.setIcon(new ImageIcon(icon));
