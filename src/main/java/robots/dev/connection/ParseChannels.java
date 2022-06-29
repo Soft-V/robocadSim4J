@@ -41,7 +41,7 @@ public class ParseChannels
         return outList;
     }
 
-    public static String JoinFloatChannels(List<Float> lst)
+    public static String JoinFloatChannel(List<Float> lst)
     {
         List<String> strings = new ArrayList<>();
         for (float f : lst)
@@ -51,7 +51,7 @@ public class ParseChannels
         return String.join(";", strings);
     }
 
-    public static String JoinBoolChannels(List<Boolean> lst)
+    public static String JoinBoolChannel(List<Boolean> lst)
     {
         List<String> strings = new ArrayList<>();
         for (boolean b : lst)

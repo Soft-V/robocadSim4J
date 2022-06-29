@@ -1,8 +1,7 @@
 package robots;
 
-import robots.dev.connection.ListenPort;
-import robots.dev.connection.ParseChannels;
-import robots.dev.connection.TalkPort;
+import robots.dev.ConnectionHelper;
+import robots.dev.Holder;
 
 import java.util.List;
 
@@ -60,45 +59,31 @@ public class RT1
     private final LineSensor lineSensor = new LineSensor();
     public LineSensor getLineSensor() { this.updateSensors(); return this.lineSensor; }
 
-    private final TalkPort otherChannel = new TalkPort(65431);
-    private final TalkPort motorsChannel = new TalkPort(65432);
-    private final TalkPort resetsChannel = new TalkPort(65434);
-    private final ListenPort encsChannel = new ListenPort(65435);
-    private final ListenPort sensorsChannel = new ListenPort(65436);
-    private final ListenPort buttonsChannel = new ListenPort(65437);
+    private final ConnectionHelper connectionHelper = new ConnectionHelper(Holder.CONN_OTHER |
+            Holder.CONN_MOTORS_AND_ENCS | Holder.CONN_RESETS | Holder.CONN_SENS | Holder.CONN_BUTTONS);
 
     public void connect()
     {
-        this.otherChannel.startTalking();
-        this.motorsChannel.startTalking();
-        this.resetsChannel.startTalking();
-        this.encsChannel.startListening();
-        this.sensorsChannel.startListening();
-        this.buttonsChannel.startListening();
+        connectionHelper.startChannels();
     }
 
     public void disconnect()
     {
-        this.otherChannel.stopTalking();
-        this.motorsChannel.stopTalking();
-        this.resetsChannel.stopTalking();
-        this.encsChannel.stopListening();
-        this.sensorsChannel.stopListening();
-        this.buttonsChannel.stopListening();
+        connectionHelper.stopChannels();
     }
 
     private void updateOther()
     {
-        this.otherChannel.outString = ParseChannels.JoinBoolChannels(List.of
+        connectionHelper.setOther(List.of
                 (
-                        this.ledGreen,
-                        this.ledRed
+                        this.ledGreen ? 1f : 0f,
+                        this.ledRed ? 1f : 0f
                 ));
     }
 
     private void updateMotors()
     {
-        this.motorsChannel.outString = ParseChannels.JoinFloatChannels(List.of
+        connectionHelper.setMotors(List.of
                 (
                         this.rightMotorSpeed,
                         this.leftMotorSpeed,
@@ -108,7 +93,7 @@ public class RT1
 
     private void updateResets()
     {
-        this.otherChannel.outString = ParseChannels.JoinBoolChannels(List.of
+        connectionHelper.setResets(List.of
                 (
                         this.resetRightEnc,
                         this.resetLeftEnc,
@@ -119,7 +104,7 @@ public class RT1
 
     private void updateEncs()
     {
-        List<Float> values = ParseChannels.ParseFloatChannel(this.encsChannel.outString);
+        List<Float> values = connectionHelper.getEncs();
         if (values.size() == 3)
         {
             this.rightMotorEnc = values.get(0);
@@ -130,7 +115,7 @@ public class RT1
 
     private void updateSensors()
     {
-        List<Float> values = ParseChannels.ParseFloatChannel(this.sensorsChannel.outString);
+        List<Float> values = connectionHelper.getSens();
         if (values.size() == 9)
         {
             this.rightUS = values.get(0);
@@ -147,7 +132,7 @@ public class RT1
 
     private void updateButtons()
     {
-        List<Boolean> values = ParseChannels.ParseBoolChannel(this.buttonsChannel.outString);
+        List<Boolean> values = connectionHelper.getButtons();
         if (values.size() == 4)
         {
             this.buttonEMS = values.get(0);
